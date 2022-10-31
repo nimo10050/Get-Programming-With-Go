@@ -8,13 +8,13 @@ import (
 func main() {
 
 	for i := 0; i < 10; i++ {
-		go func() {
-			fmt.Println("current index: ")
-		}()
+		go myFunction(int64(i))
 	}
 
-	//for {
-	// fmt.Printf("main goroutine: i ")
 	time.Sleep(3 * time.Second)
-	//}
+
+}
+
+func myFunction(i int64) {
+	fmt.Println(i)
 }
