@@ -25,6 +25,10 @@ func (ss SS) Length() int64 {
 	return int64(len(ss))
 }
 
+// 这个主要用来测试 list 的 element.Value.(*类型) 的作用， 其实感觉类似 java 中的类型转换，
+// 比如我从 user := element.Value.(*User), 那我的 user 就具备 User 类型的属性和行为
+//  user := element.Value.(User) 与上面的区别
+// 前者修改是会影响 list 的元素， 后者不会.
 func main()  {
 
 	key := "key1"

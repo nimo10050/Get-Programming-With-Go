@@ -11,6 +11,8 @@ var (
 	m1 = make(map[string]list.Element)
 )
 
+// 这个主要是用来测试 map 中 value 存储 *list.Element 和 list.Element 的区别
+// 本质上来讲， 还是地址和值的区别的问题
 func main()  {
 
 	key := "key1"
