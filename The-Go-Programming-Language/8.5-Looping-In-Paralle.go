@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"sync"
@@ -39,5 +40,40 @@ func makeThumbnails(filenames <-chan string) int64 {
 }
 
 func ImageFile(filename string) (string, error) {
+	if filename == "ddd" {
+		fmt.Println("DDDD")
+		return "", fmt.Errorf("error 拉")
+	}
 	return "", nil
+}
+
+func main() {
+	ss := []string{"ddd", "def", "ddd", "def", "ddd", "def"}
+	err := makeThumbnails4(ss)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func makeThumbnails4(filenames []string) error {
+	errors := make(chan error)
+	for _, f := range filenames {
+		// worker
+
+		go func(f string) {
+			fmt.Println("scale  ", f)
+			_, err := ImageFile(f)
+			errors <- err
+		}(f)
+	}
+
+	for range filenames {
+		if err := <-errors; err != nil {
+			fmt.Println("yes error")
+			return err
+		} else {
+			fmt.Println("no error")
+		}
+	}
+	return nil
 }
