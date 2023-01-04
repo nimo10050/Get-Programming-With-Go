@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -18,10 +19,18 @@ func main() {
 			log.Print(err)
 			continue
 		}
+		//var data [1024]byte
+		//n, err := conn.Read(data[0:])
+		//s := string(data[0:n])
+		conn.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
 
-		handleConn(conn)
+		//fmt.Fprintf(conn, "receive: ")
+		//handleConn(conn)
 		// 注意 加不加 go 关键字的区别
-		// go handleConn(conn)
+		go handleConn(conn)
 	}
 }
 
