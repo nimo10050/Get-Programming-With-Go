@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"sync"
+	"time"
 )
 
 func makeThumbnails(filenames <-chan string) int64 {
@@ -48,15 +49,31 @@ func ImageFile(filename string) (string, error) {
 }
 
 func main() {
-	ss := []string{"ddd", "def", "ddd", "def", "ddd", "def"}
+	ss := []string{"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def"}
 	err := makeThumbnails4(ss)
 	if err != nil {
 		fmt.Println(err)
 	}
+	time.Sleep(10 * time.Second)
+	fmt.Println("over")
 }
 
 func makeThumbnails4(filenames []string) error {
-	errors := make(chan error)
+	errors := make(chan error, 50)
 	for _, f := range filenames {
 		// worker
 
@@ -64,16 +81,19 @@ func makeThumbnails4(filenames []string) error {
 			fmt.Println("scale  ", f)
 			_, err := ImageFile(f)
 			errors <- err
+			fmt.Println("SEND OVER")
 		}(f)
 	}
 
 	for range filenames {
+		fmt.Println("=====")
 		if err := <-errors; err != nil {
 			fmt.Println("yes error")
 			return err
 		} else {
-			fmt.Println("no error")
+			fmt.Println("NO ERROR")
 		}
 	}
+
 	return nil
 }
