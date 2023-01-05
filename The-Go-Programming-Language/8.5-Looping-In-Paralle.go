@@ -49,21 +49,21 @@ func ImageFile(filename string) (string, error) {
 }
 
 func main() {
-	ss := []string{"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
-		"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def"}
+	ss := []string{"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def"}
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def",
+	//"ddd", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def", "def", "ddd", "def", "ddd", "def"}
 	err := makeThumbnails4(ss)
 	if err != nil {
 		fmt.Println(err)
@@ -73,20 +73,24 @@ func main() {
 }
 
 func makeThumbnails4(filenames []string) error {
-	errors := make(chan error, 50)
+	// 定义一个无缓冲通道
+	errors := make(chan error)
 	for _, f := range filenames {
 		// worker
-
 		go func(f string) {
 			fmt.Println("scale  ", f)
 			_, err := ImageFile(f)
+			fmt.Println("开始阻塞了...")
+			// 由于接收方无法接收消息, 所以这里只能等待
 			errors <- err
-			fmt.Println("SEND OVER")
+			fmt.Println("解除阻塞了...")
 		}(f)
 	}
 
 	for range filenames {
-		fmt.Println("=====")
+		// 这里有个小问题, 因为我们一开始定义的是一个无缓冲通道
+		// 当此处从通道中接收到第一个 非 nil 的 error 时，这里直接 return 了, 导致接收方没人接收数据了
+		// 但是上面的 goroutine 还在排队往通道发送数据，最终导致上面的 goroutine 就阻塞住了
 		if err := <-errors; err != nil {
 			fmt.Println("yes error")
 			return err
